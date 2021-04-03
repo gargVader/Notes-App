@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layoutNote"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,6 +9,17 @@
     android:layout_marginTop="@dimen/_12sdp"
     android:background="@drawable/background_note"
     android:orientation="vertical">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imageNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+
+        app:riv_corner_radius_top_left="@dimen/_10sdp"
+        app:riv_corner_radius_top_right="@dimen/_10sdp"
+        tools:src="@drawable/ic_launcher_background"
+        />
 
     <TextView
         android:id="@+id/textTitle"

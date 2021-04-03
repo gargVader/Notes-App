@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         notesRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
         noteList = new ArrayList<>();
-        notesAdapter = new NotesAdapter(noteList);
+        notesAdapter = new NotesAdapter(noteList, getApplicationContext());
         notesRecyclerView.setAdapter(notesAdapter);
 
         getNotes();

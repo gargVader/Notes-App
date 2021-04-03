@@ -1,13 +1,28 @@
 package com.example.notesapp.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -16,16 +31,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notesapp.utils.Constants;
 import com.example.notesapp.R;
 import com.example.notesapp.database.NotesDatabase;
-import com.example.notesapp.database.NotesDatabase_Impl;
 import com.example.notesapp.entities.Note;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.lang.ref.PhantomReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class CreateNoteActivity extends AppCompatActivity {
@@ -35,11 +52,16 @@ public class CreateNoteActivity extends AppCompatActivity {
     private EditText inputNoteTitle, inputNoteSubtitle, inputNoteText;
     private TextView textDateTime;
     private View viewSubtitleIndicator;
+    private ImageView imageNote;
 
+    BottomSheetBehavior bottomSheetBehavior;
     private ImageView imageSave;
-    private String selectedNoteColor;
+    private int selectedNoteColor = Constants.NOTE_COLOR_DEFAULT;
     private LinearLayout layoutMiscellaneous;
 
+    private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
+    private static final int REQUEST_CODE_SELECT_IMAGE = 2;
+    private String selectedImagePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +74,10 @@ public class CreateNoteActivity extends AppCompatActivity {
         textDateTime = findViewById(R.id.textDateTime);
         imageSave = findViewById(R.id.imageSave);
         viewSubtitleIndicator = findViewById(R.id.viewSubtitleIndicator);
+        imageNote = findViewById(R.id.imageNote);
         layoutMiscellaneous = findViewById(R.id.layoutMiscellaneous);
 
+        initMiscellaneous();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, dd MMM yyyy hh:mm  a");
         String dateTime = simpleDateFormat.format(Calendar.getInstance().getTime());
@@ -77,11 +101,35 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
-        selectedNoteColor = "#333333";
+    }
 
-//        initMiscellaneous();
-//        setViewSubtitleIndicatorColor();
+    private void initMiscellaneous() {
+        onClickBehaviourForMiscellaneous();
+        updateSelectedColorHelper();
 
+        layoutMiscellaneous.findViewById(R.id.layoutAddImage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CreateNoteActivity.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            REQUEST_CODE_STORAGE_PERMISSION
+                    );
+                } else {
+                    selectImage();
+                }
+            }
+        });
+    }
+
+    private void selectImage() {
+        Log.e(LOG_TAG, "Selecting image");
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+        startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE);
+//        }
     }
 
     private void saveNote() {
@@ -102,6 +150,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setNoteText(text);
         note.setSubtitle(subTitle);
         note.setDateTime(textDateTime.getText().toString());
+        note.setColor(String.valueOf(selectedNoteColor));
+        note.setImagePath(selectedImagePath);
 
         class SaveNoteTask extends AsyncTask<Void, Void, Void> {
 
@@ -122,19 +172,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         new SaveNoteTask().execute();
     }
 
-    private void initMiscellaneous(){
-        onClickBehaviourForMiscellaneous();
-
-        final ImageView imageColor1 = layoutMiscellaneous.findViewById(R.id.imageColor1);
-        final ImageView imageColor2 = layoutMiscellaneous.findViewById(R.id.imageColor2);
-        final ImageView imageColor3 = layoutMiscellaneous.findViewById(R.id.imageColor3);
-        final ImageView imageColor4 = layoutMiscellaneous.findViewById(R.id.imageColor4);
-        final ImageView imageColor5 = layoutMiscellaneous.findViewById(R.id.imageColor5);
-
-    }
-
     private void onClickBehaviourForMiscellaneous() {
-        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(layoutMiscellaneous);
+        bottomSheetBehavior = BottomSheetBehavior.from(layoutMiscellaneous);
         layoutMiscellaneous.findViewById(R.id.textMiscellaneous).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,28 +184,118 @@ public class CreateNoteActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        final ImageView imageColor1 = layoutMiscellaneous.findViewById(R.id.imageColor1);
-        final ImageView imageColor2 = layoutMiscellaneous.findViewById(R.id.imageColor2);
-        final ImageView imageColor3 = layoutMiscellaneous.findViewById(R.id.imageColor3);
-        final ImageView imageColor4 = layoutMiscellaneous.findViewById(R.id.imageColor4);
-        final ImageView imageColor5 = layoutMiscellaneous.findViewById(R.id.imageColor5);
+    // passed as onClick in layout_miscellaneous
+    public void updateSelectedColor(View view) {
 
-        // TODO : One function to manage select color functionality
+        switch (view.getId()) {
+            case R.id.viewColor1:
+                selectedNoteColor = Constants.NOTE_COLOR_1;
+                break;
+            case R.id.viewColor2:
+                selectedNoteColor = Constants.NOTE_COLOR_2;
+                break;
+            case R.id.viewColor3:
+                selectedNoteColor = Constants.NOTE_COLOR_3;
+                break;
+            case R.id.viewColor4:
+                selectedNoteColor = Constants.NOTE_COLOR_4;
+                break;
+            case R.id.viewColor5:
+                selectedNoteColor = Constants.NOTE_COLOR_5;
+                break;
+        }
+        Log.e(LOG_TAG, "Selected Note color=" + selectedNoteColor);
+        updateSelectedColorHelper();
+    }
 
-        layoutMiscellaneous.findViewById(R.id.viewColor1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    private void updateSelectedColorHelper() {
+        // Mark all image views as empty
+        // Can be optimised using a variable that keeps track of the last active color
+        ImageView imageColor1 = layoutMiscellaneous.findViewById(R.id.imageColor1);
+        ImageView imageColor2 = layoutMiscellaneous.findViewById(R.id.imageColor2);
+        ImageView imageColor3 = layoutMiscellaneous.findViewById(R.id.imageColor3);
+        ImageView imageColor4 = layoutMiscellaneous.findViewById(R.id.imageColor4);
+        ImageView imageColor5 = layoutMiscellaneous.findViewById(R.id.imageColor5);
 
-            }
-        });
+        imageColor1.setVisibility(View.GONE);
+        imageColor2.setVisibility(View.GONE);
+        imageColor3.setVisibility(View.GONE);
+        imageColor4.setVisibility(View.GONE);
+        imageColor5.setVisibility(View.GONE);
 
+        switch (selectedNoteColor) {
+            case Constants.NOTE_COLOR_1:
+                imageColor1.setVisibility(View.VISIBLE);
+                break;
+            case Constants.NOTE_COLOR_2:
+                imageColor2.setVisibility(View.VISIBLE);
+                break;
+            case Constants.NOTE_COLOR_3:
+                imageColor3.setVisibility(View.VISIBLE);
+                break;
+            case Constants.NOTE_COLOR_4:
+                imageColor4.setVisibility(View.VISIBLE);
+                break;
+            case Constants.NOTE_COLOR_5:
+                imageColor5.setVisibility(View.VISIBLE);
+                break;
+        }
+        setViewSubtitleIndicatorColor();
     }
 
     private void setViewSubtitleIndicatorColor() {
         GradientDrawable gradientDrawable = (GradientDrawable) viewSubtitleIndicator.getBackground();
-        gradientDrawable.setColor(Color.parseColor(selectedNoteColor));
+        gradientDrawable.setColor(getResources().getColor(Constants.NOTE_COLOR[selectedNoteColor - 1]));
+
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_STORAGE_PERMISSION && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) selectImage();
+            else Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SELECT_IMAGE && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri selectedImageUri = data.getData();
+                if (selectedImageUri != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                        imageNote.setImageBitmap(bitmap);
+                        imageNote.setVisibility(View.VISIBLE);
+
+                        selectedImagePath = getPathFromUri(selectedImageUri);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    }
+
+    private String getPathFromUri(Uri contentUri) {
+        String filePath;
+        Cursor cursor = getContentResolver()
+                .query(contentUri, null, null, null, null);
+        if (cursor == null) {
+            filePath = contentUri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int index = cursor.getColumnIndex("_data");
+            filePath = cursor.getString(index);
+            cursor.close();
+        }
+
+        return filePath;
+    }
 }

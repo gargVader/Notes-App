@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutAddUrlContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/_10sdp"
+    android:background="@drawable/background_dialog"
+    android:padding="@dimen/_15sdp">
+
+    <LinearLayout
+        android:id="@+id/layoutHeading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/imageAddUrl"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:src="@drawable/ic_web_link"
+            app:tint="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:includeFontPadding="false"
+            android:text="Add URL"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/inputURL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:paddingStart="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_5sdp"
+        android:fontFamily="@font/ubuntu_regular"
+        android:gravity="center_vertical"
+        android:background="@null"
+        android:hint="Enter URL"
+        android:inputType="textUri"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:includeFontPadding="false"
+        android:lines="1"
+        android:textColor="@color/white"
+        android:textColorHint="@color/colorTextHint"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintTop_toBottomOf="@+id/layoutHeading" />
+
+    <LinearLayout
+        android:id="@+id/layoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginTop="@dimen/_8sdp"
+        app:layout_constraintTop_toBottomOf="@+id/inputURL">
+
+        <TextView
+            android:id="@+id/buttonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorSearchBackground"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="CANCEL"
+            android:padding="@dimen/_8sdp"
+            android:textColor="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/buttonAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorSearchBackground"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="ADD"
+            android:padding="@dimen/_8sdp"
+            android:textColor="@color/colorAccent"
+
+            />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
