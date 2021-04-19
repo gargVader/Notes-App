@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notesapp.R;
 import com.example.notesapp.entities.Note;
+import com.example.notesapp.listeners.NotesListener;
 import com.example.notesapp.utils.Constants;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -23,10 +24,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     private List<Note> notes;
     public Context context;
+    NotesListener notesListener;
 
-    public NotesAdapter(List<Note> notes, Context context) {
+    public NotesAdapter(List<Note> notes, Context context, NotesListener notesListener) {
         this.notes = notes;
         this.context = context;
+        this.notesListener = notesListener;
     }
 
     @NonNull
@@ -42,6 +45,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         holder.setNote(notes.get(position));
+        holder.layoutNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notesListener.onNoteClick(notes.get(position), position);
+            }
+        });
     }
 
     @Override
@@ -86,10 +95,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 gradientDrawable.setColor(context.getResources().getColor(Constants.NOTE_COLOR[Integer.parseInt(selectedNoteColor) - 1]));
             }
 
-            if (note.getImagePath()!=null){
+            if (note.getImagePath() != null) {
                 imageNote.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath()));
                 imageNote.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 imageNote.setVisibility(View.GONE);
             }
         }
