@@ -58,7 +58,7 @@
             android:textColorHint="@color/colorTextHint"
             android:textSize="@dimen/_13ssp" />
     </LinearLayout>
-    
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notesRecyclerView"
         android:layout_width="match_parent"
@@ -69,9 +69,8 @@
         android:paddingStart="0dp"
         android:paddingEnd="@dimen/_12sdp"
         app:layout_constraintBottom_toTopOf="@id/layoutQuickActions"
-        app:layout_constraintTop_toBottomOf="@id/layoutSearch"
-        />
-    
+        app:layout_constraintTop_toBottomOf="@id/layoutSearch" />
+
     <LinearLayout
         android:id="@+id/layoutQuickActions"
         android:layout_width="match_parent"
@@ -108,20 +107,19 @@
             android:src="@drawable/ic_web_link"
             app:tint="@color/colorIcons" />
     </LinearLayout>
-    
+
     <ImageView
         android:id="@+id/imageAddNoteMain"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
         android:layout_marginEnd="@dimen/_30sdp"
+        android:background="@drawable/background_add_button"
         android:contentDescription="@string/app_name"
         android:padding="@dimen/_5sdp"
-        android:background="@drawable/background_add_button"
         android:src="@drawable/ic_baseline_add_24"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layoutQuickActions"
-        app:layout_constraintTop_toTopOf="@id/layoutQuickActions"
-        />
-    
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/layoutQuickActions" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
