@@ -1,6 +1,6 @@
-package com.example.notesapp.listeners;
+package com.example.notesapp.listener;
 
-import com.example.notesapp.entities.Note;
+import com.example.notesapp.data.model.Note;
 
 public interface NotesListener {
 

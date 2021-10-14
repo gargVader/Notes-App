@@ -1,4 +1,4 @@
-package com.example.notesapp.entities;
+package com.example.notesapp.data.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "notes")
+@Entity(tableName = "note_table")
 public class Note implements Serializable {
 
     @PrimaryKey(autoGenerate = true)

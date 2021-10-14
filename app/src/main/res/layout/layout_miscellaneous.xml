@@ -163,7 +163,7 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_baseline_image_24"
-            android:tint="@color/colorIcons" />
+            app:tint="@color/colorIcons" />
 
         <TextView
             android:layout_width="match_parent"
@@ -190,7 +190,7 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_web_link"
-            android:tint="@color/colorIcons" />
+            app:tint="@color/colorIcons" />
 
         <TextView
             android:layout_width="match_parent"
@@ -200,6 +200,34 @@
             android:includeFontPadding="false"
             android:text="Add URL"
             android:textColor="@color/colorIcons"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutDeleteNote"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:visibility="gone"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_baseline_delete_24"
+            app:tint="@color/colorDelete" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:includeFontPadding="false"
+            android:text="Delete Note"
+            android:textColor="@color/colorDelete"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.example.notesapp.adapters;
+package com.example.notesapp.adapter;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -10,11 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notesapp.R;
-import com.example.notesapp.entities.Note;
-import com.example.notesapp.listeners.NotesListener;
+import com.example.notesapp.data.model.Note;
+import com.example.notesapp.listener.NotesListener;
 import com.example.notesapp.utils.Constants;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -22,12 +23,12 @@ import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
-    private List<Note> notes;
+    private List<Note> mNoteList;
     public Context context;
     NotesListener notesListener;
 
     public NotesAdapter(List<Note> notes, Context context, NotesListener notesListener) {
-        this.notes = notes;
+        this.mNoteList = notes;
         this.context = context;
         this.notesListener = notesListener;
     }
@@ -42,21 +43,27 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         );
     }
 
+    public void setNoteList(List<Note> noteList) {
+        this.mNoteList = noteList;
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        holder.setNote(notes.get(position));
+        holder.setNote(mNoteList.get(position));
         holder.layoutNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notesListener.onNoteClick(notes.get(position), position);
+                notesListener.onNoteClick(mNoteList.get(position), position);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        if (notes == null) return 0;
-        return notes.size();
+        if (mNoteList == null) return 0;
+        return mNoteList.size();
     }
 
     @Override

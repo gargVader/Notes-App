@@ -13,11 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NotesApp">
         <activity
-            android:name=".activities.CreateNoteActivity"
+            android:name=".activity.CreateNoteActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>

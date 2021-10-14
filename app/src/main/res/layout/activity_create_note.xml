@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".activities.CreateNoteActivity">
+    tools:context=".activity.CreateNoteActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,9 +28,9 @@
                 android:layout_marginEnd="@dimen/_12sdp"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
-                android:tint="@color/colorIcons"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/colorIcons" />
 
             <ImageView
                 android:id="@+id/imageSave"
@@ -41,9 +41,9 @@
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_baseline_done_24"
-                android:tint="@color/colorIcons"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/imageBack" />
+                app:layout_constraintTop_toTopOf="@id/imageBack"
+                app:tint="@color/colorIcons" />
 
             <EditText
                 android:id="@+id/inputNoteTitle"
@@ -120,6 +120,20 @@
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/inputNoteSubtitle" />
 
+            <ImageView
+                android:id="@+id/imageRemoveImage"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/background_delete"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ic_baseline_delete_24"
+                app:layout_constraintEnd_toEndOf="@id/imageNote"
+                app:layout_constraintTop_toTopOf="@id/imageNote"
+                android:visibility="gone"
+                app:tint="@color/white" />
+
             <LinearLayout
                 android:id="@+id/layoutWebURL"
                 android:layout_width="match_parent"
@@ -130,8 +144,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/imageNote"
-                >
+                app:layout_constraintTop_toBottomOf="@id/imageNote">
 
                 <TextView
                     android:id="@+id/textWebURL"
@@ -142,7 +155,14 @@
                     android:fontFamily="@font/ubuntu_regular"
                     android:includeFontPadding="false"
                     android:textSize="@dimen/_13ssp"
-                    />
+                    tools:text="google.co.in" />
+
+                <ImageView
+                    android:id="@+id/imageRemoveWebUrl"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/ic_baseline_delete_24"
+                    app:tint="@color/colorDelete" />
 
 
             </LinearLayout>
