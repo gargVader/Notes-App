@@ -11,67 +11,49 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notesapp.R;
 import com.example.notesapp.data.model.Note;
-import com.example.notesapp.listener.NotesListener;
 import com.example.notesapp.utils.Constants;
 import com.makeramen.roundedimageview.RoundedImageView;
 
-import java.util.List;
+public class NotesAdapter extends ListAdapter<Note, NotesAdapter.NoteViewHolder> {
 
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
-
-    private List<Note> mNoteList;
+    OnItemClickListener onItemClickListener;
     public Context context;
-    NotesListener notesListener;
 
-    public NotesAdapter(List<Note> notes, Context context, NotesListener notesListener) {
-        this.mNoteList = notes;
+    public NotesAdapter(Context context) {
+        super(diffCallback);
         this.context = context;
-        this.notesListener = notesListener;
     }
+
+    public static final DiffUtil.ItemCallback<Note> diffCallback = new DiffUtil.ItemCallback<Note>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+    };
 
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new NoteViewHolder(
-                LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_container_note, parent, false),
-                context
-        );
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_container_note, parent, false);
+        return new NoteViewHolder(view, context);
     }
-
-    public void setNoteList(List<Note> noteList) {
-        this.mNoteList = noteList;
-        notifyDataSetChanged();
-    }
-
 
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        holder.setNote(mNoteList.get(position));
-        holder.layoutNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notesListener.onNoteClick(mNoteList.get(position), position);
-            }
-        });
+        holder.setNote(getItem(position));
     }
 
-    @Override
-    public int getItemCount() {
-        if (mNoteList == null) return 0;
-        return mNoteList.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
-
-    static class NoteViewHolder extends RecyclerView.ViewHolder {
+    protected class NoteViewHolder extends RecyclerView.ViewHolder {
 
         TextView textTitle, textSubtitle, textDateTime;
         LinearLayout layoutNote;
@@ -86,6 +68,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             layoutNote = itemView.findViewById(R.id.layoutNote);
             this.context = context;
             imageNote = itemView.findViewById(R.id.imageNote);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (onItemClickListener != null && position != RecyclerView.NO_POSITION)
+                        onItemClickListener.onItemClick(getItem(position));
+                }
+            });
+
         }
 
         void setNote(Note note) {
@@ -110,5 +102,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             }
         }
     }
+
+    public interface OnItemClickListener {
+        public void onItemClick(Note note);
+    }
+
+    public void setOnItemCLickListener(OnItemClickListener onItemCLickListener) {
+        this.onItemClickListener = onItemCLickListener;
+    }
+
 
 }

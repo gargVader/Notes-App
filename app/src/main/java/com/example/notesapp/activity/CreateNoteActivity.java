@@ -34,13 +34,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.notesapp.R;
 import com.example.notesapp.data.model.Note;
 import com.example.notesapp.utils.Constants;
 import com.example.notesapp.utils.Utils;
-import com.example.notesapp.view_models.NoteViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.FileNotFoundException;

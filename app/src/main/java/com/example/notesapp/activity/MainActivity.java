@@ -16,13 +16,11 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.notesapp.R;
 import com.example.notesapp.adapter.NotesAdapter;
 import com.example.notesapp.data.model.Note;
-import com.example.notesapp.listener.NotesListener;
 import com.example.notesapp.view_models.NoteViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NotesListener {
+public class MainActivity extends AppCompatActivity implements NotesAdapter.OnItemClickListener {
 
     public static final int REQUEST_ADD_NOTE = 1;
     public static final int REQUEST_VIEW_NOTE = 2;
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     int noteClickedPosition = -1;
 
-    RecyclerView notesRecyclerView;
+    RecyclerView recyclerView;
     NotesAdapter notesAdapter;
     NoteViewModel noteViewModel;
 
@@ -48,13 +46,15 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         setContentView(R.layout.activity_main);
 
         imageAddNoteMain = findViewById(R.id.imageAddNoteMain);
-        notesRecyclerView = findViewById(R.id.notesRecyclerView);
+        recyclerView = findViewById(R.id.notesRecyclerView);
         setupAddNotesButton();
-        initViewModel();
 
-        notesRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        notesAdapter = new NotesAdapter(new ArrayList<>(), getApplicationContext(), this);
-        notesRecyclerView.setAdapter(notesAdapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        notesAdapter = new NotesAdapter(getApplicationContext());
+        recyclerView.setAdapter(notesAdapter);
+
+        initViewModel();
+        notesAdapter.setOnItemCLickListener(this);
     }
 
     void setupAddNotesButton() {
@@ -77,17 +77,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             @Override
             public void onChanged(List<Note> noteList) {
                 Log.d(TAG, "onChanged: ");
-                notesAdapter.setNoteList(noteList);
+                notesAdapter.submitList(noteList);
             }
         });
-    }
-
-    @Override
-    public void onNoteClick(Note note, int position) {
-        noteClickedPosition = position;
-        Intent intent = new Intent(getApplicationContext(), CreateNoteActivity.class);
-        intent.putExtra(KEY_NOTE, note);
-        startActivityForResult(intent, REQUEST_VIEW_NOTE);
     }
 
     @Override
@@ -113,5 +105,13 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             noteViewModel.delete(note);
         }
 
+    }
+
+    @Override
+    public void onItemClick(Note note) {
+        Log.d(TAG, "onItemClick: ");
+        Intent intent = new Intent(getApplicationContext(), CreateNoteActivity.class);
+        intent.putExtra(KEY_NOTE, note);
+        startActivityForResult(intent, REQUEST_VIEW_NOTE);
     }
 }

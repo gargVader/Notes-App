@@ -2,8 +2,6 @@ package com.example.notesapp.utils;
 
 import com.example.notesapp.R;
 
-import java.util.List;
-
 public class Constants {
 
     public static final int NOTE_COLOR_1  = 1;
