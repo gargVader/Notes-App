@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".activity.CreateNoteActivity">
+    tools:context="com.girishgarg.notesapp.activity.CreateNoteActivity">
 
     <ScrollView
         android:layout_width="match_parent"
