@@ -2,8 +2,11 @@ package com.example.notesapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -25,18 +28,16 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.OnIt
     public static final int REQUEST_ADD_NOTE = 1;
     public static final int REQUEST_VIEW_NOTE = 2;
     public static final int REQUEST_DELETE_NOTE = 3;
-    public static final int REQUEST_CODE_SHOW_NOTE = 4;
 
     public static final String KEY_NOTE = "note";
     public static final String KEY_TO_DELETE = "to_delete_note";
 
     public static final String TAG = "Notes";
 
-    int noteClickedPosition = -1;
-
     RecyclerView recyclerView;
     NotesAdapter notesAdapter;
     NoteViewModel noteViewModel;
+    EditText inputSearch;
 
     ImageView imageAddNoteMain;
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.OnIt
 
         imageAddNoteMain = findViewById(R.id.imageAddNoteMain);
         recyclerView = findViewById(R.id.notesRecyclerView);
+        inputSearch = findViewById(R.id.inputSearch);
         setupAddNotesButton();
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.OnIt
         recyclerView.setAdapter(notesAdapter);
 
         initViewModel();
+        initSearchBox();
+
         notesAdapter.setOnItemCLickListener(this);
     }
 
@@ -73,11 +77,36 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.OnIt
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()))
                 .get(NoteViewModel.class);
 
-        noteViewModel.getAllContests().observe(this, new Observer<List<Note>>() {
+        noteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
             @Override
             public void onChanged(List<Note> noteList) {
                 Log.d(TAG, "onChanged: ");
                 notesAdapter.submitList(noteList);
+            }
+        });
+    }
+
+    void initSearchBox() {
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                notesAdapter.cancelTimer();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String searchKeyword = "%"+s.toString()+"%";
+                noteViewModel.getSearchNotes(searchKeyword).observe(MainActivity.this, new Observer<List<Note>>() {
+                    @Override
+                    public void onChanged(List<Note> notes) {
+                        notesAdapter.submitList(notes);
+                    }
+                });
             }
         });
     }

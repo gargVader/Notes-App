@@ -19,7 +19,7 @@ public class NoteViewModel extends AndroidViewModel {
     public NoteViewModel(@NonNull Application application) {
         super(application);
         noteRepository = new NoteRepository(application);
-        allNotes = noteRepository.getAllContest();
+        allNotes = noteRepository.getAllNotes();
     }
 
     public void insert(Note note) {
@@ -34,8 +34,14 @@ public class NoteViewModel extends AndroidViewModel {
         noteRepository.delete(note);
     }
 
-    public LiveData<List<Note>> getAllContests() {
+    public LiveData<List<Note>> getAllNotes() {
         return allNotes;
     }
+
+
+    public LiveData<List<Note>> getSearchNotes(String searchKeyword) {
+        return noteRepository.getSearchNotes(searchKeyword);
+    }
+
 
 }

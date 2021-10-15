@@ -33,9 +33,16 @@ public class NoteRepository {
         new DeleteAsyncTask().execute(note);
     }
 
-    public LiveData<List<Note>> getAllContest() {
+    public LiveData<List<Note>> getAllNotes() {
         return allNotes;
     }
+
+    public LiveData<List<Note>> getSearchNotes(String searchKeyword) {
+        return noteDao.getSearchNotes(searchKeyword);
+    }
+
+
+
     private class InsertAsyncTask extends AsyncTask<Note, Void, Void> {
         @Override
         protected Void doInBackground(Note... notes) {

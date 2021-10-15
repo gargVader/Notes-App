@@ -33,4 +33,8 @@ public interface NoteDao {
     @Query("DELETE FROM note_table")
     void deleteAll();
 
+    @Query("SELECT * FROM note_table WHERE title LIKE :searchKeyword or subtitle LIKE :searchKeyword or note_text LIKE :searchKeyword")
+    LiveData<List<Note>> getSearchNotes(String searchKeyword);
+
+
 }

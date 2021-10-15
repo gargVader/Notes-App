@@ -19,10 +19,17 @@ import com.example.notesapp.data.model.Note;
 import com.example.notesapp.utils.Constants;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.sql.Time;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class NotesAdapter extends ListAdapter<Note, NotesAdapter.NoteViewHolder> {
 
     OnItemClickListener onItemClickListener;
     public Context context;
+    Timer timer;
+    List<Note> notesSource;
 
     public NotesAdapter(Context context) {
         super(diffCallback);
@@ -110,6 +117,26 @@ public class NotesAdapter extends ListAdapter<Note, NotesAdapter.NoteViewHolder>
     public void setOnItemCLickListener(OnItemClickListener onItemCLickListener) {
         this.onItemClickListener = onItemCLickListener;
     }
+
+    public void searchNotes(final String searchKeyword){
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(searchKeyword.trim().isEmpty()){
+
+                }else{
+
+                }
+            }
+        }, 500);
+    }
+
+    public void cancelTimer(){
+        if (timer!=null) timer.cancel();
+    }
+
+
 
 
 }
