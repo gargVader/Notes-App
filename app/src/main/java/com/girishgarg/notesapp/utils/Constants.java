@@ -1,6 +1,6 @@
 package com.girishgarg.notesapp.utils;
 
-import com.example.notesapp.R;
+import com.girishgarg.notesapp.R;
 
 public class Constants {
 

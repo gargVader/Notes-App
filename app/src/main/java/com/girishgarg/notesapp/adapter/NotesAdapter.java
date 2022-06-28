@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.notesapp.R;
+import com.girishgarg.notesapp.R;
 import com.girishgarg.notesapp.data.model.Note;
 import com.girishgarg.notesapp.utils.Constants;
 import com.makeramen.roundedimageview.RoundedImageView;

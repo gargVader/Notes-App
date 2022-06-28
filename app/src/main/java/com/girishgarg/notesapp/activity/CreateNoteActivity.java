@@ -33,7 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.notesapp.R;
+import com.girishgarg.notesapp.R;
 import com.girishgarg.notesapp.data.model.Note;
 import com.girishgarg.notesapp.utils.Constants;
 import com.girishgarg.notesapp.utils.KeyboardUtils;

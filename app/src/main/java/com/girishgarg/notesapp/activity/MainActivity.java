@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.notesapp.R;
+import com.girishgarg.notesapp.R;
 import com.girishgarg.notesapp.adapter.NotesAdapter;
 import com.girishgarg.notesapp.data.model.Note;
 import com.girishgarg.notesapp.utils.Utils;
