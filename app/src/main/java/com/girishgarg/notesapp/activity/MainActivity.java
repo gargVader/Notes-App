@@ -293,6 +293,4 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.OnIt
         });
         dialogAddURL.show();
     }
-
-
 }
